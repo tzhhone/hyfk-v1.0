@@ -1,80 +1,106 @@
 <template>
   <div>
     <el-container>
-      <el-header style="background-color: rgb(84, 92, 100);">
+      <el-header style="padding: 0;">
         <el-affix :position="top">
-          <div class="tz-container">
-            <div class="tz-logo">
-              <a href="/">
-                <el-avatar src="/logo.png" image-size="48"></el-avatar>
+          <div style="width: 100%;background-color: rgb(84, 92, 100);">
+            <div class="tz-container">
+              <div class="tz-logo">
+                <a href="/">
+                  <el-avatar src="/logo.png" image-size="48"></el-avatar>
 
-                <span
-                  style="color: aliceblue;font-size: 19px;font-weight: bold;position: relative;left: 9px;bottom: 12px;"
-                  >辉耀发卡网</span
+                  <span
+                    style="color: aliceblue;font-size: 19px;font-weight: bold;position: relative;left: 9px;bottom: 12px;"
+                    >{{ $_appName }}</span
+                  >
+                </a>
+              </div>
+              <div class="tz-menu-iphone">
+                <i
+                  class="el-icon-s-fold"
+                  style="color:aliceblue;font-size: 26px;"
+                  @click="drawer = true"
+                ></i>
+                <!-- 右侧边栏 -->
+                <el-drawer
+                  title="菜单"
+                  v-model="drawer"
+                  :direction="direction"
+                  :size="150"
+                  :with-header="false"
+                  destroy-on-close
                 >
-              </a>
-            </div>
-            <div class="tz-menu-iphone">
-              <i
-                class="el-icon-s-fold"
-                style="color:aliceblue;font-size: 26px;"
-                @click="drawer = true"
-              ></i>
-              <!-- 右侧边连 -->
-              <el-drawer
-                title="菜单"
-                v-model="drawer"
-                :direction="direction"
-                :before-close="handleClose"
-                :with-header="false"
-                destroy-on-close
-              >
-                <span>我来啦!</span>
-              </el-drawer>
-            </div>
-            <div class="tz-menu">
-              <el-menu
-                :default-active="activeIndex"
-                class="el-menu-demo"
-                mode="horizontal"
-                @select="handleSelect"
-                background-color="#545c64"
-                text-color="#fff"
-                active-text-color="#ffd04b"
-              >
-                <el-menu-item index="1">购买商品</el-menu-item>
-                <el-menu-item index="2"> 查询订单 </el-menu-item>
-                <el-menu-item index="3"> 订单投诉 </el-menu-item>
-                <el-menu-item index="4">联系客服</el-menu-item>
-                <el-menu-item index="5">注册</el-menu-item>
-                <el-button
-                  type="success"
-                  style="margin: 8px;box-shadow:0px 0px 10px #000;"
-                  round
-                  >登录</el-button
+                  <el-menu
+                    :default-active="activeIndex"
+                    class="el-menu-vertical-demo"
+                    @select="handleSelect"
+                  >
+                    <el-menu-item index="1">
+                      <i class="el-icon-location"></i>
+                      <template #title><span>购买商品</span></template>
+                    </el-menu-item>
+                    <el-menu-item index="2">
+                      <i class="el-icon-search"></i>
+                      <template #title>查询订单</template>
+                    </el-menu-item>
+                    <el-menu-item index="3">
+                      <i class="el-icon-document"></i>
+                      <template #title>订单投诉</template>
+                    </el-menu-item>
+                    <el-menu-item index="4">
+                      <i class="el-icon-headset"></i>
+                      <template #title>联系客服</template>
+                    </el-menu-item>
+                    <el-menu-item index="5">
+                      <i class="el-icon-info"></i>
+                      <template #title>注册</template>
+                    </el-menu-item>
+                    <el-menu-item index="6">
+                      <i class="el-icon-user-solid"></i>
+                      <template #title>登录</template>
+                    </el-menu-item>
+                  </el-menu>
+                </el-drawer>
+              </div>
+              <div class="tz-menu">
+                <el-menu
+                  :default-active="activeIndex"
+                  class="el-menu-demo"
+                  mode="horizontal"
+                  @select="handleSelect"
+                  background-color="#545c64"
+                  text-color="#fff"
+                  active-text-color="#ffd04b"
                 >
-              </el-menu>
+                  <el-menu-item index="1">购买商品</el-menu-item>
+                  <el-menu-item index="2">查询订单</el-menu-item>
+                  <el-menu-item index="3">订单投诉</el-menu-item>
+                  <el-menu-item index="4">联系客服</el-menu-item>
+                  <el-menu-item index="5">注册</el-menu-item>
+                  <el-button
+                    style="margin: 8px;box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04)"
+                    round
+                    >登录</el-button
+                  >
+                </el-menu>
+              </div>
             </div>
           </div>
         </el-affix>
       </el-header>
 
       <el-main>
-        Main
-        <HelloWorld msg="Welcome to Your Vue.js App" />
+        <transition name="fade" mode="out-in">
+          <router-view></router-view>
+        </transition>
       </el-main>
     </el-container>
   </div>
 </template>
 
 <script>
-import HelloWorld from "./components/HelloWorld.vue";
-
 export default {
   name: "App",
-  components: {
-    HelloWorld,
-  },
   data() {
     return {
       activeIndex: "1",
@@ -84,8 +110,8 @@ export default {
     };
   },
   methods: {
-    handleSelect(key, keyPath) {
-      console.log(key, keyPath);
+    handleSelect(key) {
+      this.activeIndex = key;
     },
   },
 };
@@ -95,6 +121,9 @@ export default {
 body {
   margin: 0;
 }
+a {
+  text-decoration: None;
+}
 
 .tz-container {
   position: relative;
@@ -102,6 +131,8 @@ body {
   margin-right: auto;
   height: 60px;
   max-width: 1140px;
+
+
 }
 .tz-menu {
   float: right;
@@ -109,7 +140,7 @@ body {
 .tz-menu-iphone {
   float: right;
   margin: 15px 0;
-  visibility: hidden;
+  display: none;
 }
 .tz-logo {
   display: inline-block;
@@ -117,10 +148,13 @@ body {
   margin: 8px 0;
 }
 .el-main {
+  max-width: 1140px;
   margin-left: auto;
   margin-right: auto;
 }
-
+.home {
+  width: 1100px;
+}
 @media screen and (max-width: 1200px) {
   .tz-container {
     max-width: 1140px;
@@ -132,6 +166,9 @@ body {
     max-width: 960px;
     padding: 0 15px 0 15px;
   }
+  .home {
+    width: auto;
+  }
 }
 
 @media screen and (max-width: 768px) {
@@ -140,10 +177,13 @@ body {
     padding: 0 15px 0 15px;
   }
   .tz-menu {
-    visibility: hidden;
+    display: none;
   }
   .tz-menu-iphone {
-    visibility: visible;
+    display: inline;
+  }
+  .home {
+    width: auto;
   }
 }
 
@@ -153,10 +193,17 @@ body {
     padding: 0 15px 0 15px;
   }
   .tz-menu {
-    visibility: hidden;
+    display: none;
   }
   .tz-menu-iphone {
-    visibility: visible;
+    display: inline;
+  }
+  .el-main {
+    margin-left: 0;
+    margin-right: 0;
+  }
+  .home {
+    width: auto;
   }
 }
 </style>

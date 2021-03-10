@@ -1,0 +1,105 @@
+.tz-card-select :hover {
+  cursor: pointer
+}
+
+
+
+.el-row .box-card.gray .el-card {
+  background: #f8f8f8 !important;
+  height: 67px;
+}
+
+.el-row .box-card .el-card {
+
+  max-height: 150px;
+}
+
+.el-row .box-card-select.gray .el-card {
+  background-image: linear-gradient(120deg,
+      #3c8ce7 15%,
+      #00eaff 80%) !important;
+}
+
+.el-row .box-card-select .el-card {
+  background-image: linear-gradient(120deg,
+      #3c8ce7 15%,
+      #00eaff 80%) !important;
+}
+.el-row .box-card-select-g .el-card{
+  border-color: #3c8ce7;
+}
+
+.box-card-select .el-card .card-title p {
+  color: #fff !important;
+}
+
+.box-card-select .el-card .card-title .card-span {
+  color: #fff !important;
+  opacity: 0.76;
+}
+
+.el-row .el-card .card-title p {
+  margin: 0;
+  
+  font-size: 12px;
+  font-weight: bold;
+  color: #545454;
+}
+
+.el-row .el-card .card-title .card-span {
+  font-weight: bold;
+  color: #545454;
+  font-size: 12px;
+}
+.el-row .el-card .card-title .card-pirce {
+  font-weight: 700;
+  color: #3C8CE7;
+  margin-right: 5px;
+  font-size: 14px;
+}
+.tz-card-select .el-card__body {
+  padding: 12px 19px 0px 20px !important;
+}
+
+.tz-title p {
+  font-weight: 600;
+  font-size: 18px;
+  margin-top: 0;
+  color: #545454;
+  display: inline-block;
+}
+
+.tz-card-select {
+  border-radius: 4px;
+  margin-top: 4px;
+
+}
+
+
+
+.grid-content {
+  border-radius: 4px;
+  min-height: 36px;
+}
+.card-num{
+  margin-bottom: 12px;
+}
+.card-p {
+  display: inline-block;
+  margin-top: 10px;
+  width: 53px;
+  height: 5px;
+  background: #f8f8f8;
+  position: relative;
+  border-radius: 3px;
+
+}
+
+.card-p p {
+  display: inline-block;
+  position: absolute;
+  width: 100%;
+  height: 5px;
+  background: linear-gradient(55deg, #65d69e, #31dd92);
+  border-radius: 3px;
+}
