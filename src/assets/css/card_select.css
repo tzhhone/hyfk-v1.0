@@ -103,3 +103,40 @@
   background: linear-gradient(55deg, #65d69e, #31dd92);
   border-radius: 3px;
 }
+
+.card-pay {
+  
+ 
+}
+.card-pay p{
+  display: inline-block;
+  margin-left: 3px !important;
+
+}
+
+.card-pay .card-title i{
+  font-size: 24px;
+}
+
+.card-pay .card-title{
+  align-items: center;
+  text-align: center;
+  display: flex;
+  margin-bottom: 12px;
+}
+
+.box-card.box-card-select-g .card-pay .card-title i.icon-zhifubao{
+  color: #02a9f1;
+}
+.box-card.box-card-select-g .card-pay .card-title i.icon-weixinzhifu1{
+  color: #09bb07;
+}
+.box-card.box-card-select-g .card-pay .card-title i.icon-zhifupingtai-yinlian{
+  color: #d41c35;
+}
+.box-card.box-card-select-g .card-pay .card-title i.icon-icon-paypal{
+  color: #02a9f1;
+}
+.box-card.box-card-select-g .card-pay .card-title i.icon-shejiaotubiao-33{
+  color: #f9934a;
+}

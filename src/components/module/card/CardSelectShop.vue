@@ -56,7 +56,6 @@ export default {
   },
   mounted() {
     this.cardKeyOn = this.$props.cardKey;
-    console.log(this.data[0].tags);
   },
   methods: {
     handleSelect(key) {

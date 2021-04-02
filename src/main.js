@@ -7,6 +7,7 @@ import "./assets/css/card_select.css"
 
 
 
+
 const app = createApp(App,{appName:"辉耀发卡"})
 
 installElementPlus(app)

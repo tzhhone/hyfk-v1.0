@@ -34,12 +34,13 @@
                     :default-active="activeIndex"
                     class="el-menu-vertical-demo"
                     @select="handleSelect"
+                    router
                   >
-                    <el-menu-item index="1">
+                    <el-menu-item index="/">
                       <i class="el-icon-location"></i>
                       <template #title><span>购买商品</span></template>
                     </el-menu-item>
-                    <el-menu-item index="2">
+                    <el-menu-item index="search">
                       <i class="el-icon-search"></i>
                       <template #title>查询订单</template>
                     </el-menu-item>
@@ -71,9 +72,10 @@
                   background-color="#545c64"
                   text-color="#fff"
                   active-text-color="#ffd04b"
+                  router
                 >
-                  <el-menu-item index="1">购买商品</el-menu-item>
-                  <el-menu-item index="2">查询订单</el-menu-item>
+                  <el-menu-item index="/">购买商品</el-menu-item>
+                  <el-menu-item index="search">查询订单</el-menu-item>
                   <el-menu-item index="3">订单投诉</el-menu-item>
                   <el-menu-item index="4">联系客服</el-menu-item>
                   <el-menu-item index="5">注册</el-menu-item>
@@ -103,15 +105,36 @@ export default {
   name: "App",
   data() {
     return {
-      activeIndex: "1",
+      activeIndex: "",
 
       drawer: false,
       direction: "rtl",
     };
   },
+  watch: {
+    $route: {
+      handler() {
+        const that = this;
+        that.init();
+      },
+    },
+  },
+  mounted() {
+    
+    this.init();
+  },
   methods: {
     handleSelect(key) {
       this.activeIndex = key;
+    },
+    init() {
+      
+      const path_url = this.$route.path;
+      if (path_url !== "/") {
+        this.activeIndex = path_url.replace("/", "");
+      } else {
+        this.activeIndex  =  "/";
+      }
     },
   },
 };
@@ -131,8 +154,6 @@ a {
   margin-right: auto;
   height: 60px;
   max-width: 1140px;
-
-
 }
 .tz-menu {
   float: right;
@@ -155,6 +176,7 @@ a {
 .home {
   width: 1100px;
 }
+
 @media screen and (max-width: 1200px) {
   .tz-container {
     max-width: 1140px;
@@ -167,6 +189,7 @@ a {
     padding: 0 15px 0 15px;
   }
   .home {
+    
     width: auto;
   }
 }
