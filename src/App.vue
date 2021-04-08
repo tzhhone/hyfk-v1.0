@@ -44,7 +44,7 @@
                       <i class="el-icon-search"></i>
                       <template #title>查询订单</template>
                     </el-menu-item>
-                    <el-menu-item index="3">
+                    <el-menu-item index="complain">
                       <i class="el-icon-document"></i>
                       <template #title>订单投诉</template>
                     </el-menu-item>
@@ -76,7 +76,7 @@
                 >
                   <el-menu-item index="/">购买商品</el-menu-item>
                   <el-menu-item index="search">查询订单</el-menu-item>
-                  <el-menu-item index="3">订单投诉</el-menu-item>
+                  <el-menu-item index="complain">订单投诉</el-menu-item>
                   <el-menu-item index="4">联系客服</el-menu-item>
                   <el-menu-item index="5">注册</el-menu-item>
                   <el-button
