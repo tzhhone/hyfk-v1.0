@@ -8,7 +8,7 @@
     </div>
   </div>
 </template>
-<style lang="less" src="../assets/css/md.less" />
+<style lang="less" src="../assets/css/md.less"></style>
 
 <script>
 
@@ -58,5 +58,4 @@ export default {
 };
 </script>
 
-<style>
-</style>
+
