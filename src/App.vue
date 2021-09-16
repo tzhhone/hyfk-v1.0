@@ -56,7 +56,7 @@
                       <i class="el-icon-info"></i>
                       <template #title>注册</template>
                     </el-menu-item>
-                    <el-menu-item index="6">
+                    <el-menu-item index="login">
                       <i class="el-icon-user-solid"></i>
                       <template #title>登录</template>
                     </el-menu-item>
@@ -79,7 +79,7 @@
                   <el-menu-item index="complain">订单投诉</el-menu-item>
                   <el-menu-item index="4">联系客服</el-menu-item>
                   <el-menu-item index="5">注册</el-menu-item>
-                  <el-button
+                  <el-button @click="login"
                     style="margin: 8px;box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04)"
                     round
                     >登录</el-button
@@ -124,6 +124,10 @@ export default {
     this.init();
   },
   methods: {
+    login(){
+      this.$router.push({name:"Login"});
+      console.log("123");
+    },
     handleSelect(key) {
       this.activeIndex = key;
     },

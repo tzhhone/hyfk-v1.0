@@ -140,3 +140,17 @@
 .box-card.box-card-select-g .card-pay .card-title i.icon-shejiaotubiao-33{
   color: #f9934a;
 }
+.form-main{
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  width: 380px;
+
+}
+
+@media screen and (max-width:576px){
+  .form-main{
+    width: auto !important;
+  }
+}
+
