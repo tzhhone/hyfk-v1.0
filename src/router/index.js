@@ -29,7 +29,17 @@ const routes = [
   {
     path:'/login',
     name:'Login',
-    component:()=>import('../views/login/Login.vue')
+    component:()=>import('../views/user/Login.vue')
+  },
+  {
+    path:'/reg',
+    name:'Reg',
+    component:()=>import('../views/user/Reg.vue')
+  },
+  {
+    path:'/resetpass',
+    name:'ResetPass',
+    component:()=>import('../views/user/ResetPass.vue')
   }
 ]
 

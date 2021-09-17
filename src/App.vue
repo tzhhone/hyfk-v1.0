@@ -52,7 +52,7 @@
                       <i class="el-icon-headset"></i>
                       <template #title>联系客服</template>
                     </el-menu-item>
-                    <el-menu-item index="5">
+                    <el-menu-item index="reg">
                       <i class="el-icon-info"></i>
                       <template #title>注册</template>
                     </el-menu-item>
@@ -78,7 +78,7 @@
                   <el-menu-item index="search">查询订单</el-menu-item>
                   <el-menu-item index="complain">订单投诉</el-menu-item>
                   <el-menu-item index="4">联系客服</el-menu-item>
-                  <el-menu-item index="5">注册</el-menu-item>
+                  <el-menu-item index="reg">注册</el-menu-item>
                   <el-button @click="login"
                     style="margin: 8px;box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04)"
                     round
