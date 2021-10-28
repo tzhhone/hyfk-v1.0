@@ -92,6 +92,7 @@
       </el-header>
 
       <el-main>
+        <login></login>
         <transition name="fade" mode="out-in">
           <router-view></router-view>
         </transition>
@@ -101,8 +102,11 @@
 </template>
 
 <script>
+import Login from '/components/module/page/Login.vue'
 export default {
+  components: { Login },
   name: "App",
+  component:Login,
   data() {
     return {
       activeIndex: "",

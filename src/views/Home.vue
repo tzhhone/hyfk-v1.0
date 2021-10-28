@@ -1,5 +1,6 @@
 <template>
   <div class="home" ref="home">
+
     <el-alert title="公告" type="success" :closable="false">
       <p>这里是辉耀发卡官方demo站。所有商品仅供测试。并无实际商品。</p>
       <p>
