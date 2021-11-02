@@ -90,10 +90,11 @@
           </div>
         </el-affix>
       </el-header>
-
+      <login></login>
       <el-main>
-        <login></login>
+        
         <transition name="fade" mode="out-in">
+          
           <router-view></router-view>
         </transition>
       </el-main>
@@ -102,11 +103,10 @@
 </template>
 
 <script>
-import Login from '/components/module/page/Login.vue'
+import Login from './components/module/page/Login.vue'
 export default {
-  components: { Login },
   name: "App",
-  component:Login,
+  components:{Login},
   data() {
     return {
       activeIndex: "",
