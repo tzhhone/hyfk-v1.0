@@ -90,7 +90,7 @@
           </div>
         </el-affix>
       </el-header>
-      <login></login>
+      <login @close=close v-show="loginShow"></login>
       <el-main>
         
         <transition name="fade" mode="out-in">
@@ -110,7 +110,7 @@ export default {
   data() {
     return {
       activeIndex: "",
-
+      loginShow:false,
       drawer: false,
       direction: "rtl",
     };
@@ -128,9 +128,13 @@ export default {
     this.init();
   },
   methods: {
+    close(){
+      this.loginShow = false;
+    },
     login(){
-      this.$router.push({name:"Login"});
-      console.log("123");
+      // this.$router.push({name:"Login"});
+      // console.log("123");
+      this.loginShow = true;
     },
     handleSelect(key) {
       this.activeIndex = key;
