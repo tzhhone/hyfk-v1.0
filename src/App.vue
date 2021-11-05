@@ -1,16 +1,23 @@
 <template>
   <div>
     <el-container>
-      <el-header style="padding: 0;">
+      <el-header style="padding: 0">
         <el-affix :position="top">
-          <div style="width: 100%;background-color: rgb(84, 92, 100);">
+          <div style="width: 100%; background-color: rgb(84, 92, 100)">
             <div class="tz-container">
               <div class="tz-logo">
                 <a href="/">
                   <el-avatar src="/logo.png" image-size="48"></el-avatar>
 
                   <span
-                    style="color: aliceblue;font-size: 19px;font-weight: bold;position: relative;left: 9px;bottom: 12px;"
+                    style="
+                      color: aliceblue;
+                      font-size: 19px;
+                      font-weight: bold;
+                      position: relative;
+                      left: 9px;
+                      bottom: 12px;
+                    "
                     >{{ $_appName }}</span
                   >
                 </a>
@@ -18,7 +25,7 @@
               <div class="tz-menu-iphone">
                 <i
                   class="el-icon-s-fold"
-                  style="color:aliceblue;font-size: 26px;"
+                  style="color: aliceblue; font-size: 26px"
                   @click="drawer = true"
                 ></i>
                 <!-- 右侧边栏 -->
@@ -52,11 +59,11 @@
                       <i class="el-icon-headset"></i>
                       <template #title>联系客服</template>
                     </el-menu-item>
-                    <el-menu-item index="reg">
+                    <el-menu-item @click="regShow = true">
                       <i class="el-icon-info"></i>
                       <template #title>注册</template>
                     </el-menu-item>
-                    <el-menu-item index="login">
+                    <el-menu-item @click="login">
                       <i class="el-icon-user-solid"></i>
                       <template #title>登录</template>
                     </el-menu-item>
@@ -78,9 +85,16 @@
                   <el-menu-item index="search">查询订单</el-menu-item>
                   <el-menu-item index="complain">订单投诉</el-menu-item>
                   <el-menu-item index="4">联系客服</el-menu-item>
-                  <el-menu-item index="reg">注册</el-menu-item>
-                  <el-button @click="login"
-                    style="margin: 8px;box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04)"
+                  <el-button class="tz-button-reg" @click="regShow = true"
+                    >注册</el-button
+                  >
+                  <el-button
+                    @click="login"
+                    style="
+                      margin: 8px;
+                      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12),
+                        0 0 6px rgba(0, 0, 0, 0.04);
+                    "
                     round
                     >登录</el-button
                   >
@@ -90,11 +104,10 @@
           </div>
         </el-affix>
       </el-header>
-      <login @close=close v-show="loginShow"></login>
+      <login @close="loginShow = !loginShow" v-show="loginShow"></login>
+      <reg @close="regShow = !regShow" v-show="regShow"></reg>
       <el-main>
-        
         <transition name="fade" mode="out-in">
-          
           <router-view></router-view>
         </transition>
       </el-main>
@@ -103,14 +116,16 @@
 </template>
 
 <script>
-import Login from './components/module/page/Login.vue'
+import Login from "./components/module/page/Login.vue";
+import Reg from "./components/module/page/Reg.vue";
 export default {
   name: "App",
-  components:{Login},
+  components: { Login, Reg },
   data() {
     return {
       activeIndex: "",
-      loginShow:false,
+      loginShow: false,
+      regShow: false,
       drawer: false,
       direction: "rtl",
     };
@@ -124,14 +139,10 @@ export default {
     },
   },
   mounted() {
-    
     this.init();
   },
   methods: {
-    close(){
-      this.loginShow = false;
-    },
-    login(){
+    login() {
       // this.$router.push({name:"Login"});
       // console.log("123");
       this.loginShow = true;
@@ -140,18 +151,38 @@ export default {
       this.activeIndex = key;
     },
     init() {
-      
       const path_url = this.$route.path;
       if (path_url !== "/") {
         this.activeIndex = path_url.replace("/", "");
       } else {
-        this.activeIndex  =  "/";
+        this.activeIndex = "/";
       }
     },
   },
 };
 </script>
+<style scoped>
+.tz-button-reg {
+  margin: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
+  background-color: rgb(84, 92, 100);
+  color: rgb(255, 255, 255);
+  border-color: #ffc107;
+  transition: all .5s ease-in;
+}
+.tz-button-reg:hover{
 
+  background-color: rgb(84, 92, 100);
+  color: rgb(255, 255, 255);
+  border-color: #c6e2ff;
+
+}
+.tz-button-reg:focus{
+  background-color: rgb(84, 92, 100);
+  color: rgb(255, 255, 255);
+  border-color: #c6e2ff;
+}
+</style>
 <style>
 body {
   margin: 0;
@@ -201,7 +232,6 @@ a {
     padding: 0 15px 0 15px;
   }
   .home {
-    
     width: auto;
   }
 }

@@ -1,18 +1,11 @@
-<!--
- * @Description: 登录页面组建
- * @Version: 1.0
- * @Autor: tzhhone
- * @Date: 2021-10-28 09:45:00
- * @LastEditors: tzhhone
- * @LastEditTime: 2021-11-02 18:40:56
--->
-
 <template>
   <div class="tz-back">
     <div class="form-main tz-login-wrap">
       <div class="tz-header">
-        <span>登录</span>
+        <span>注册</span>
+        
         <div class="tz-close">
+            
           <div @click="close()"></div>
         </div>
       </div>
@@ -25,26 +18,33 @@
         ref="ruleForm"
         class="demo-ruleForm"
       >
-        <el-form-item prop="user">
+        <el-form-item placeholder="请输入用户名" prop="user">
           <el-input
+            placeholder="请输入用户名"
             type="user"
             v-model="ruleForm.user"
-            placeholder="账号"
             autocomplete="off"
           ></el-input>
         </el-form-item>
-        <el-form-item prop="password">
+        <el-form-item placeholder="请输入密码" prop="password">
           <el-input
+            placeholder="请输入密码"
             type="password"
             v-model="ruleForm.password"
-            placeholder="密码"
+            autocomplete="off"
+          ></el-input>
+        </el-form-item>
+        <el-form-item prop="retpassword">
+          <el-input
+            placeholder="请确认密码"
+            type="retpassword"
+            v-model="ruleForm.retpassword"
             autocomplete="off"
           ></el-input>
         </el-form-item>
         <el-form-item>
-
-          <el-link href="resetpass" type="primary" :underline="false" style="float: right"
-            >忘记密码？</el-link>
+          <el-input placeholder="请输入电子邮箱" v-model="ruleForm.email">
+          </el-input>
         </el-form-item>
 
         <el-form-item>
@@ -52,24 +52,33 @@
             type="primary"
             @click="submitForm('ruleForm')"
             style="width: 100%"
-            >登录</el-button
+            >注册</el-button
           >
         </el-form-item>
       </el-form>
-
     </div>
-</div>
+  </div>
 </template>
 
 <script>
 export default {
-  name: "Login",
+  name: "Reg",
   data() {
+    var validatePass = (rule, value, callback) => {
+      if (!value) {
+        callback(new Error("请再次输入密码"));
+      } else if (value !== this.ruleForm.password) {
+        callback(new Error("两次输入的密码不一致"));
+      } else {
+        callback();
+      }
+    };
     return {
       labelPosition: "left",
       ruleForm: {
         user: "",
         password: "",
+        retpassword: "",
       },
       rules: {
         user: [
@@ -79,6 +88,9 @@ export default {
         password: [
           { required: true, message: "请输入密码", trigger: "blur" },
           { min: 8, message: "长度不能小于 8 个字符", trigger: "blur" },
+        ],
+        retpassword: [
+          { required: true, validator: validatePass, trigger: "blur" },
         ],
       },
     };
@@ -95,13 +107,12 @@ export default {
       });
     },
     close(){
-      this.$emit('close',true);
+        this.$emit('close',true);
     }
   },
-  props: {},
-  mounted() {},
 };
 </script>
+
 <style scoped>
 .tz-header {
   position: relative;
@@ -133,7 +144,6 @@ export default {
     font-weight: 600;
 }
 .tz-close:hover {
-
   cursor:pointer;
   background-color: #3498db;
   transition: all 0.8s ease-in;
@@ -166,5 +176,3 @@ export default {
   z-index: 9999;
 }
 </style>
-
-
