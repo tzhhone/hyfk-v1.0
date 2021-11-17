@@ -4,7 +4,7 @@
  * @Autor: tzhhone
  * @Date: 2021-10-28 09:45:00
  * @LastEditors: tzhhone
- * @LastEditTime: 2021-11-02 18:40:56
+ * @LastEditTime: 2021-11-17 09:33:29
 -->
 
 <template>
@@ -43,7 +43,7 @@
         </el-form-item>
         <el-form-item>
 
-          <el-link href="resetpass" type="primary" :underline="false" style="float: right"
+          <el-link href="javascript:void(0);" @click="setPasswd" type="primary" :underline="false" style="float: right"
             >忘记密码？</el-link>
         </el-form-item>
 
@@ -96,6 +96,9 @@ export default {
     },
     close(){
       this.$emit('close',true);
+    },
+    setPasswd(){
+      this.$emit('setPasswd',true);
     }
   },
   props: {},

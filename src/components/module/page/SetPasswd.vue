@@ -1,8 +1,20 @@
+<!--
+ * @Description: 修改密码页
+ * @Version: 1.0
+ * @Autor: tzhhone
+ * @Date: 2021-11-17 09:12:53
+ * @LastEditors: tzhhone
+ * @LastEditTime: 2021-11-17 10:07:10
+-->
+
 <template>
   <div class="tz-back">
     <div class="form-main tz-login-wrap">
       <div class="tz-header">
-        <span>注册</span>
+        <div class="back" @click="back">
+          <i class="el-icon-arrow-left"></i>
+          <span>修改密码</span>
+        </div>
 
         <div class="tz-close">
           <div @click="close()"></div>
@@ -17,33 +29,13 @@
         ref="ruleForm"
         class="demo-ruleForm"
       >
-        <el-form-item placeholder="请输入用户名" prop="user">
+        <el-form-item prop="user">
           <el-input
-            placeholder="请输入用户名"
             type="user"
             v-model="ruleForm.user"
+            placeholder="账号"
             autocomplete="off"
           ></el-input>
-        </el-form-item>
-        <el-form-item placeholder="请输入密码" prop="password">
-          <el-input
-            placeholder="请输入密码"
-            type="password"
-            v-model="ruleForm.password"
-            autocomplete="off"
-          ></el-input>
-        </el-form-item>
-        <el-form-item prop="retpassword">
-          <el-input
-            placeholder="请确认密码"
-            type="retpassword"
-            v-model="ruleForm.retpassword"
-            autocomplete="off"
-          ></el-input>
-        </el-form-item>
-        <el-form-item>
-          <el-input placeholder="请输入电子邮箱" v-model="ruleForm.email">
-          </el-input>
         </el-form-item>
         <el-form-item prop="code">
           <el-input
@@ -59,12 +51,30 @@
             </template>
           </el-input>
         </el-form-item>
+        <el-form-item prop="password">
+          <el-input
+            type="password"
+            v-model="ruleForm.password"
+            placeholder="密码"
+            autocomplete="off"
+          ></el-input>
+        </el-form-item>
+
+        <el-form-item prop="setPassword">
+          <el-input
+            type="password"
+            v-model="ruleForm.setPassword"
+            placeholder="重复密码"
+            autocomplete="off"
+          ></el-input>
+        </el-form-item>
+
         <el-form-item>
           <el-button
             type="primary"
             @click="submitForm('ruleForm')"
             style="width: 100%"
-            >注册</el-button
+            >修改密码</el-button
           >
         </el-form-item>
       </el-form>
@@ -74,24 +84,15 @@
 
 <script>
 export default {
-  name: "Reg",
+  name: "SetPasswd",
   data() {
-    var validatePass = (rule, value, callback) => {
-      if (!value) {
-        callback(new Error("请再次输入密码"));
-      } else if (value !== this.ruleForm.password) {
-        callback(new Error("两次输入的密码不一致"));
-      } else {
-        callback();
-      }
-    };
     return {
       labelPosition: "left",
       ruleForm: {
         user: "",
         password: "",
-        retpassword: "",
-        code: "",
+        setPassword: "",
+        code:""
       },
       rules: {
         user: [
@@ -102,13 +103,14 @@ export default {
           { required: true, message: "请输入密码", trigger: "blur" },
           { min: 8, message: "长度不能小于 8 个字符", trigger: "blur" },
         ],
-        retpassword: [
-          { required: true, validator: validatePass, trigger: "blur" },
+        setPassword: [
+          { required: true, message: "请输入密码", trigger: "blur" },
+          { min: 8, message: "长度不能小于 8 个字符", trigger: "blur" },
         ],
-        code: [
+        code:[
           { required: true, message: "请输入验证码", trigger: "blur" },
           { min: 5, message: "长度不能小于 5 个字符", trigger: "blur" },
-        ],
+        ]
       },
     };
   },
@@ -126,13 +128,33 @@ export default {
     close() {
       this.$emit("close", true);
     },
-    send() {
-      this.$emit("send", true);
+    back() {
+      this.$emit("back", true);
     },
+    send(){
+        // var x = setTimeout(function(){
+            
+        // },1000)
+        this.$emit("send",true);
+    }
   },
+
+  props: {},
+  mounted() {},
 };
 </script>
-
+<style lang="less" scoped>
+@hoverColor: rgba(75, 176, 235);
+.tz-header {
+  .back {
+    display: inline-block;
+    &:hover {
+      color: @hoverColor;
+      cursor: pointer;
+    }
+  }
+}
+</style>
 <style scoped>
 .tz-header {
   position: relative;

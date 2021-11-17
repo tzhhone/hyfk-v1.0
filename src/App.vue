@@ -104,8 +104,24 @@
           </div>
         </el-affix>
       </el-header>
-      <login @close="loginShow = !loginShow" v-show="loginShow"></login>
+      <login
+        @close="loginShow = !loginShow"
+        @setPasswd="
+          loginShow = false;
+          regShow = false;
+          setPasswdShow = !setPasswdShow;
+        "
+        v-show="loginShow"
+      ></login>
       <reg @close="regShow = !regShow" v-show="regShow"></reg>
+      <set-passwd
+        @close="setPasswdShow = !setPasswdShow"
+        @back="
+          setPasswdShow = false;
+          loginShow = true;
+        "
+        v-show="setPasswdShow"
+      ></set-passwd>
       <el-main>
         <transition name="fade" mode="out-in">
           <router-view></router-view>
@@ -118,14 +134,16 @@
 <script>
 import Login from "./components/module/page/Login.vue";
 import Reg from "./components/module/page/Reg.vue";
+import SetPasswd from "./components/module/page/SetPasswd.vue";
 export default {
   name: "App",
-  components: { Login, Reg },
+  components: { Login, Reg, SetPasswd },
   data() {
     return {
       activeIndex: "",
       loginShow: false,
       regShow: false,
+      setPasswdShow: false,
       drawer: false,
       direction: "rtl",
     };
@@ -168,16 +186,14 @@ export default {
   background-color: rgb(84, 92, 100);
   color: rgb(255, 255, 255);
   border-color: #ffc107;
-  transition: all .5s ease-in;
+  transition: all 0.5s ease-in;
 }
-.tz-button-reg:hover{
-
+.tz-button-reg:hover {
   background-color: rgb(84, 92, 100);
   color: rgb(255, 255, 255);
   border-color: #c6e2ff;
-
 }
-.tz-button-reg:focus{
+.tz-button-reg:focus {
   background-color: rgb(84, 92, 100);
   color: rgb(255, 255, 255);
   border-color: #c6e2ff;
