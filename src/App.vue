@@ -120,7 +120,9 @@
           setPasswdShow = false;
           loginShow = true;
         "
+        @send="send"
         v-show="setPasswdShow"
+
       ></set-passwd>
       <el-main>
         <transition name="fade" mode="out-in">
@@ -176,6 +178,10 @@ export default {
         this.activeIndex = "/";
       }
     },
+    send(){
+      console.log("test")
+      return "test";
+    }
   },
 };
 </script>

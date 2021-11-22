@@ -4,7 +4,7 @@
  * @Autor: tzhhone
  * @Date: 2021-11-17 09:12:53
  * @LastEditors: tzhhone
- * @LastEditTime: 2021-11-17 10:07:10
+ * @LastEditTime: 2021-11-17 11:07:58
 -->
 
 <template>
@@ -46,7 +46,7 @@
           >
             <template #append>
               <div>
-                <el-button @click="send">发送</el-button>
+                <el-button @click="send" :disabled="codeDisabled">{{ codeText }}</el-button>
               </div>
             </template>
           </el-input>
@@ -88,11 +88,13 @@ export default {
   data() {
     return {
       labelPosition: "left",
+      codeText: "发送",
+      codeDisabled: false,
       ruleForm: {
         user: "",
         password: "",
         setPassword: "",
-        code:""
+        code: "",
       },
       rules: {
         user: [
@@ -107,10 +109,10 @@ export default {
           { required: true, message: "请输入密码", trigger: "blur" },
           { min: 8, message: "长度不能小于 8 个字符", trigger: "blur" },
         ],
-        code:[
+        code: [
           { required: true, message: "请输入验证码", trigger: "blur" },
           { min: 5, message: "长度不能小于 5 个字符", trigger: "blur" },
-        ]
+        ],
       },
     };
   },
@@ -131,12 +133,21 @@ export default {
     back() {
       this.$emit("back", true);
     },
-    send(){
-        // var x = setTimeout(function(){
-            
-        // },1000)
-        this.$emit("send",true);
-    }
+    send() {
+      
+      this.codeDisabled = true;
+      this.codeText = 60;
+      var x = setInterval(()=>{
+        this.codeText--;
+        if(this.codeText <= 0){
+          this.codeText = "发送";
+          this.codeDisabled = false;
+          clearInterval(x);
+        }
+      },1000)
+      var ret = this.$emit("send", true);
+      console.log(ret);
+    },
   },
 
   props: {},

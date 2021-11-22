@@ -17,9 +17,9 @@
         ref="ruleForm"
         class="demo-ruleForm"
       >
-        <el-form-item placeholder="请输入用户名" prop="user">
+        <el-form-item placeholder="请输入手机号" prop="user">
           <el-input
-            placeholder="请输入用户名"
+            placeholder="请输入手机号"
             type="user"
             v-model="ruleForm.user"
             autocomplete="off"
@@ -41,10 +41,6 @@
             autocomplete="off"
           ></el-input>
         </el-form-item>
-        <el-form-item>
-          <el-input placeholder="请输入电子邮箱" v-model="ruleForm.email">
-          </el-input>
-        </el-form-item>
         <el-form-item prop="code">
           <el-input
             type="text"
@@ -54,7 +50,7 @@
           >
             <template #append>
               <div>
-                <el-button @click="send">发送</el-button>
+                <el-button @click="send" :disabled="codeDisabled">{{ codeText }}</el-button>
               </div>
             </template>
           </el-input>
@@ -87,6 +83,8 @@ export default {
     };
     return {
       labelPosition: "left",
+      codeText:"发送",
+      codeDisabled:false,
       ruleForm: {
         user: "",
         password: "",
@@ -95,7 +93,7 @@ export default {
       },
       rules: {
         user: [
-          { required: true, message: "请输入用户名", trigger: "blur" },
+          { required: true, message: "请输入手机号", trigger: "blur" },
           { min: 5, message: "长度不能小于 5 个字符", trigger: "blur" },
         ],
         password: [
@@ -127,6 +125,16 @@ export default {
       this.$emit("close", true);
     },
     send() {
+      this.codeDisabled = true;
+      this.codeText = 60;
+      var x = setInterval(()=>{
+        this.codeText--;
+        if(this.codeText <= 0){
+          this.codeText = "发送";
+          this.codeDisabled = false;
+          clearInterval(x);
+        }
+      },1000)
       this.$emit("send", true);
     },
   },
