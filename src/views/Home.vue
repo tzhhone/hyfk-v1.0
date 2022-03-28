@@ -3,15 +3,6 @@
 
     <el-alert title="公告" type="success" :closable="false">
       <p>这里是辉耀发卡官方demo站。所有商品仅供测试。并无实际商品。</p>
-      <p>
-        发行包下载github:<a href="https://github.com/assimon/dujiaoka/releases"
-          >https://github.com/assimon/dujiaoka/releases</a
-        >
-        国内网盘下载:
-        <a href="https://dujiaoka.lanzous.com/ijAmBk3jbp"
-          >https://dujiaoka.lanzous.com/ijAmBk3jbpi</a
-        >
-      </p>
     </el-alert>
 
     <el-card class="box-card" style="margin-top: 15px">

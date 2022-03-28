@@ -8,7 +8,6 @@
       :xl="4"
       v-for="item in data"
       :key="item.id"
-      
     >
       <div class="tz-card-select">
         <el-card
