@@ -62,6 +62,8 @@
 </template>
 
 <script>
+import { login } from "@/services/user";
+import {setAuthorization} from '@/utils/request'
 export default {
   name: "Login",
   data() {
@@ -85,9 +87,28 @@ export default {
   },
   methods: {
     submitForm(formName) {
+      
       this.$refs[formName].validate((valid) => {
+       
         if (valid) {
           //登录
+        
+          login(this.ruleForm.user,this.ruleForm.password).then((res)=>{
+            const data = res.data;
+            
+            console.log(data);
+            if(data.status == 200){
+              this.$store.commit("account/setUser", data.data)
+              setAuthorization({token: data.token, expireAt: new Date(Date.now() + 3*24*60*60*1000)})
+              
+              this.$emit('close',true);
+              
+            }
+            
+          }
+
+          )
+          
         } else {
           //错误
           return false;
@@ -121,7 +142,7 @@ export default {
   width: 100%;
   height: 100vh;
   background: rgba(0, 0, 0, 0.5);
-  z-index: 9998;
+  z-index: 100;
 }
 .tz-close {
   position: absolute;

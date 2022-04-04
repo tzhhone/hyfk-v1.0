@@ -1,8 +1,7 @@
 <template>
   <div class="home" ref="home">
-
     <el-alert title="公告" type="success" :closable="false">
-      <p>这里是辉耀发卡官方demo站。所有商品仅供测试。并无实际商品。</p>
+      <p>这里是辉耀发卡官方demo站。所有商品仅供测试。并无实际商品。1234</p>
     </el-alert>
 
     <el-card class="box-card" style="margin-top: 15px">
@@ -40,48 +39,53 @@
             <div>
               <el-skeleton-item
                 variant="text"
-                style="height: 28px;margin-bottom: 18px;"
+                style="height: 28px; margin-bottom: 18px"
               />
               <el-skeleton-item
                 variant="text"
-                style="height: 28px;margin-bottom: 18px;"
+                style="height: 28px; margin-bottom: 18px"
               />
               <el-skeleton-item
                 variant="text"
-                style="height: 28px;margin-bottom: 18px;"
+                style="height: 28px; margin-bottom: 18px"
               />
               <el-skeleton-item
                 variant="text"
-                style="height: 28px;margin-bottom: 18px;"
+                style="height: 28px; margin-bottom: 18px"
               />
               <el-skeleton-item
                 variant="text"
-                style="height: 28px;margin-bottom: 18px;"
+                style="height: 28px; margin-bottom: 18px"
               />
               <el-skeleton-item
                 variant="text"
-                style="height: 28px;margin-bottom: 18px;"
+                style="height: 28px; margin-bottom: 18px"
               />
             </div>
           </template>
           <template #default>
-            <el-alert title="商品公告" type="success" :closable="false">
-              <p>本项目靠爱发电，如果觉得对您有帮助，何不请作者喝瓶冰阔乐</p>
+            <el-alert title="商品公告" type="success" :closable="false" v-if="shopData.place">
+              <p>{{ shopData.place }}</p>
             </el-alert>
 
             <el-form
               ref="form"
-              style="margin-top: 10px;"
+              style="margin-top: 10px"
               :model="form"
               label-width="80px"
-              size="mini"
+              
             >
               <el-form-item label="商品名称">
-                <el-input
-                  class="tz-shop-title"
-                  v-model="shopData.name"
-                  disabled
-                ></el-input>
+                <el-select v-model="ShopKey" class="m-2" placeholder="Select" @change="selectChange">
+                  <el-option
+                  
+                    v-for="item in shopDataArr"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  />
+                </el-select>
+             
               </el-form-item>
               <el-form-item label="商品价格">
                 <el-input
@@ -102,7 +106,7 @@
                   label="描述文字"
                 ></el-input-number>
               </el-form-item>
-              <el-form-item label="联系方式">
+              <!-- <el-form-item label="联系方式">
                 <el-input
                   placeholder="请填写您的QQ号或手机号方便查询"
                   :clearable="true"
@@ -116,7 +120,7 @@
                   :show-password="true"
                   v-model="form.searchPass"
                 ></el-input>
-              </el-form-item>
+              </el-form-item> -->
             </el-form>
           </template>
         </el-skeleton>
@@ -136,7 +140,7 @@
     <el-input
       type="button"
       class="tz-input-button"
-      style="margin-top: 10px;"
+      style="margin-top: 10px"
       v-model="inputText"
       v-show="buttonShow"
       id="boom"
@@ -145,11 +149,13 @@
 </template>
 
 <script>
-// @ is an alias to /src
-
 import CardSelect from "../components/module/card/CardSelect.vue";
 import CardSelectShop from "../components/module/card/CardSelectShop.vue";
 import CardPay from "../components/module/card/CardPay.vue";
+import { getClassesLabel } from "@/services/shop/classes";
+import { getClassesShopLabel } from "@/services/shop/classesShop";
+import { getShopLabel } from "@/services/shop/shop";
+
 export default {
   components: { CardSelect, CardSelectShop, CardPay },
   name: "home",
@@ -165,52 +171,23 @@ export default {
         resource: "",
         desc: "",
       },
+      user: [],
       inputText: "提交订单",
       num: 1,
       cardKey: 1,
       cardShopKey: 0,
-      cardPayKey:0,
+      cardPayKey: 0,
       shopData: {},
-      data: [
-        { id: 1, name: "测试分类", count: 2 },
-        { id: 2, name: "[官方]推荐服务", count: 3 },
-        { id: 3, name: "[官方]话费充值", count: 198 },
-        { id: 4, name: "[官方]影视专区", count: 185 },
-        { id: 5, name: "[官方]点卷专区", count: 185 },
-      ],
-
-      data1: [
-        {
-          id: 1,
-          name: "测试分类",
-          max: 5,
-          min: 0.5,
-          tags: ["多件优惠", "加群154121"],
-          num: 0,
-          place: "售后请加QQ：754709381",
-        },
-        {
-          id: 2,
-          name: "[官方]推荐服务",
-          max: 100,
-          min: 50,
-          tags: ["多件优惠", "量大加微信tzhhone"],
-          num: 158,
-        },
-        {
-          id: 3,
-          name: "[官方]话费充值",
-          min: 70,
-          tags: ["单次购买100件只需70元"],
-          num: 178,
-        },
-      ],
+      shopDataArr:[],
+      ShopKey: 0,
+      data: [],
+      data1: [],
       data2: [
         { id: 1, name: "支付宝", img: "icon-zhifubao" },
         { id: 2, name: "微信支付", img: "icon-weixinzhifu1" },
-        { id: 3, name: "银联支付", img: "icon-zhifupingtai-yinlian" },
-        { id: 4, name: "PayPal", img: "icon-paypal" },
-        { id: 5, name: "数字货币支付", img: "icon-shejiaotubiao-33" },
+        // { id: 3, name: "银联支付", img: "icon-zhifupingtai-yinlian" },
+        // { id: 4, name: "PayPal", img: "icon-paypal" },
+        // { id: 5, name: "数字货币支付", img: "icon-shejiaotubiao-33" },
       ],
       showShop: false,
       loading: false,
@@ -218,38 +195,74 @@ export default {
     };
   },
 
-  mounted() {},
+  mounted() {
+    this.classes();
+    this.handleSelect(this.cardKey);
+  },
   methods: {
-    handleSelect() {
-      // 拉取当前选择目录下的商品列表
+    classes() {
+      getClassesLabel().then((res) => {
+        const data = res.data;
+        if (data.status == 200) {
+          //成功
+          this.data = data.data;
+        }
+      });
     },
-    handleSelectShop(key) {
+    handleSelect(key) {
+      // 拉取当前选择目录下的商品列表
+      this.cardKey = key;
+      getClassesShopLabel(key).then((res) => {
+        const data = res.data;
+        if (data.status == 200) {
+          //成功
+          this.data1 = data.data;
+        }
+      });
+    },
+    handleSelectShop(key, num) {
       // 拉取当前选择商品的商品详情
+
       this.showShop = true;
       this.loading = true;
 
       // 锚点跳转
       location.href = "#shop";
-      setTimeout(() => {
-        this.loading = false;
-      }, 1000);
+
       // 是否出现下单按钮
-      if(this.cardPayKey != 0){
+      if (this.cardPayKey != 0) {
         this.buttonShow = true;
-        
       }
-      if (this.data1[key - 1].place != null && this.cardShopKey != key) {
+
+      if (this.data1[num].place != null && this.cardShopKey != key) {
         this.$notify({
           title: "消息",
           dangerouslyUseHTMLString: true,
-          message: this.data1[key - 1].place,
+          message: this.data1[num].place,
           type: "warning",
         });
       }
       this.cardShopKey = key;
 
-      this.shopData = JSON.parse(JSON.stringify(this.data1[key - 1]));
-      this.shopData.price = this.data1[key - 1].min;
+      //this.shopData = JSON.parse(JSON.stringify(this.data1[num]));
+      //this.shopData.price = this.data1[num].min;
+      getShopLabel(key).then((res) => {
+        const data = res.data;
+        if (data.status == 200) {
+          //成功
+
+          this.shopDataArr = data.data;
+    
+          if (data.data.length > 0) {
+            this.ShopKey = data.data[0].value;
+            this.shopData = data.data[0];
+            this.shopData.min = data.data[0].price;
+          } else {
+            this.$message.error("此分类下暂无商品");
+          }
+        }
+        this.loading = false;
+      });
     },
     handleSelectPay(key) {
       //这里检查之前表单是否有误，并判断当前环境是否需要验证。
@@ -260,14 +273,22 @@ export default {
           message: "请先选择商品",
           type: "warning",
         });
-        
       } else {
         this.buttonShow = true;
         location.href = "#boom";
       }
       this.cardPayKey = key;
     },
-
+    //选择器选择
+    selectChange(val){
+      this.shopDataArr.forEach(element => {
+        if(element.value == val){
+          this.shopData = element;
+          this.shopData.min = element.price;
+        }
+      });
+     
+    },
     handleChange(value) {
       //更新商品价格
       this.shopData.min = this.shopData.price * value;

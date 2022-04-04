@@ -4,5 +4,17 @@ module.exports = {
       preProcessor: 'less',
       patterns: []
     }
+  },
+  configureWebpack: {
+    module: {
+      rules: [
+        {
+          test: /\.mjs$/,
+          include: /node_modules/,
+          type: "javascript/auto"
+        },
+      ]
+    }
   }
+
 }

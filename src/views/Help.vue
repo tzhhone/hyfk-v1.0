@@ -19,7 +19,7 @@ import showdown from 'showdown'
 export default {
   data() {
     return {
-      data: store.state.helpData,
+      data: store.state.help.helpData,
       content:""
     };
   },

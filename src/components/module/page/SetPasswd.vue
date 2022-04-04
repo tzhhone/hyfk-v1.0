@@ -12,7 +12,7 @@
     <div class="form-main tz-login-wrap">
       <div class="tz-header">
         <div class="back" @click="back">
-          <i class="el-icon-arrow-left"></i>
+          <el-icon style=" position: absolute; left:-15px;top:4.5px"><arrow-left-bold /></el-icon>
           <span>修改密码</span>
         </div>
 
@@ -83,8 +83,10 @@
 </template>
 
 <script>
+import {ArrowLeftBold} from "@element-plus/icons-vue"
 export default {
   name: "SetPasswd",
+  components:{ ArrowLeftBold },
   data() {
     return {
       labelPosition: "left",
@@ -182,7 +184,7 @@ export default {
   width: 100%;
   height: 100vh;
   background: rgba(0, 0, 0, 0.5);
-  z-index: 9998;
+  z-index: 100;
 }
 .tz-close {
   position: absolute;

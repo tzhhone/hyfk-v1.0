@@ -1,61 +1,34 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import Home from '../views/Home.vue'
+import { createRouter,createWebHistory } from 'vue-router'
+import { formatRoutes } from '@/utils/routerUtil'
 
-const routes = [
-  {
-    path: '/',
-    name: 'Home',
-    component: Home,
+// 不需要登录拦截的路由配置
+const loginIgnore = {
+  names: ['Home',"Search","Complain","Help",'404', '403'],      //根据路由名称匹配
+  paths: [],   //根据路由fullPath匹配
+  /**
+   * 判断路由是否包含在该配置中
+   * @param route vue-router 的 route 对象
+   * @returns {boolean}
+   */
+  includes(route) {
     
-  },
-  {
-    path: '/search',
-    name: 'Search',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/Search.vue')
-  },
-  {
-    path:'/complain',
-    name:'Complain',
-    component:()=>import('../views/Complain.vue')
-  },
-  {
-    path:'/help',
-    name:'Help',
-    component:()=>import('../views/Help.vue')
-  },
-  {
-    path:'/login',
-    name:'Login',
-    component:()=>import('../views/user/Login.vue')
-  },
-  {
-    path:'/reg',
-    name:'Reg',
-    component:()=>import('../views/user/Reg.vue')
-  },
-  {
-    path:'/resetpass',
-    name:'ResetPass',
-    component:()=>import('../views/user/ResetPass.vue')
+    return this.names.includes(route.name) || this.paths.includes(route.path)
   }
-]
+}
 
-const router = createRouter({
-  scrollBehavior(to) {
-    if (to.hash) {
-      return {
-        el: to.hash,
-        behavior: 'smooth',
-        top: 45,
-      }
-    }
-  },
-  history: createWebHistory(),
-  routes,
+/**
+ * 初始化路由实例
+ * @param isAsync 是否异步路由模式
+ * @returns {VueRouter}
+ */
+function initRouter(isAsync) {
+  const options = isAsync ? require('./async/config.async').default : require('./config').default
+  formatRoutes(options.routes)
+  const routes = options.routes
+  return createRouter({
+    history: createWebHistory(),
+    routes,
+  })
 
-})
-
-export default router
+}
+export { loginIgnore, initRouter }

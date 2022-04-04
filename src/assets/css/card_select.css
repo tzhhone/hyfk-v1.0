@@ -4,41 +4,41 @@
 
 
 
-.el-row .box-card.gray .el-card {
+.el-row .box-card.gray {
   background: #f8f8f8 !important;
   height: 67px;
 }
 
-.el-row .box-card .el-card {
+.el-row .box-card{
 
   max-height: 150px;
 }
 
-.el-row .box-card-select.gray .el-card {
+.el-row .box-card-select.gray{
   background-image: linear-gradient(120deg,
       #3c8ce7 15%,
       #00eaff 80%) !important;
 }
 
-.el-row .box-card-select .el-card {
+.el-row .box-card-select{
   background-image: linear-gradient(120deg,
       #3c8ce7 15%,
       #00eaff 80%) !important;
 }
-.el-row .box-card-select-g .el-card{
+.el-row .box-card-select-g{
   border-color: #3c8ce7;
 }
 
-.box-card-select .el-card .card-title p {
+.box-card-select .card-title p {
   color: #fff !important;
 }
 
-.box-card-select .el-card .card-title .card-span {
+.box-card-select .card-title .card-span {
   color: #fff !important;
   opacity: 0.76;
 }
 
-.el-row .el-card .card-title p {
+.el-row .card-title p {
   margin: 0;
   
   font-size: 12px;
@@ -46,12 +46,12 @@
   color: #545454;
 }
 
-.el-row .el-card .card-title .card-span {
+.el-row .card-title .card-span {
   font-weight: bold;
   color: #545454;
   font-size: 12px;
 }
-.el-row .el-card .card-title .card-pirce {
+.el-row .card-title .card-pirce {
   font-weight: 700;
   color: #3C8CE7;
   margin-right: 5px;

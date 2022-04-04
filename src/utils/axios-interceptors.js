@@ -1,0 +1,139 @@
+import Cookie from 'js-cookie'
+import {removeAuthorization} from "@/utils/request"
+
+
+// 错误拦截拦截
+const respErr = {
+
+  /**
+   * 响应数据之前做点什么
+   * @param response 响应对象
+   * @param options 应用配置 包含: {router, i18n, store, message}
+   * @returns {*}
+   */
+   onFulfilled(response, options) {
+    const { message } = options
+    
+    switch (response.data.status) {
+      case 400:
+        message.error(response.data.msg)
+        break;
+      case 410000:
+        removeAuthorization()
+        message.error(response.data.msg)
+        break;
+      case 410002:
+        removeAuthorization()
+        
+        message.error(response.data.msg)
+        break;
+      default:
+        break;
+    }
+
+    return response
+  },
+}
+
+// 200拦截
+const resp200 = {
+
+  /**
+   * 响应数据之前做点什么
+   * @param response 响应对象
+   * @param options 应用配置 包含: {router, i18n, store, message}
+   * @returns {*}
+   */
+   onFulfilled(response, options) {
+    const { message } = options
+    
+    if (response.data.status === 200 && response.data.msg != "ok") {
+      message.success(response.data.msg)
+    }
+    return response
+  },
+}
+// 401拦截
+const resp401 = {
+  /**
+   * 响应数据之前做点什么
+   * @param response 响应对象
+   * @param options 应用配置 包含: {router, i18n, store, message}
+   * @returns {*}
+   */
+  onFulfilled(response, options) {
+    const { message } = options
+    if (response.code === 401) {
+      message.error('无此权限')
+    }
+    return response
+  },
+  /**
+   * 响应出错时执行
+   * @param error 错误对象
+   * @param options 应用配置 包含: {router, i18n, store, message}
+   * @returns {Promise<never>}
+   */
+  onRejected(error, options) {
+    const { message } = options
+    const { response } = error
+    if (response.status === 401) {
+      message.error('无此权限')
+    }
+    return Promise.reject(error)
+  }
+}
+
+const resp403 = {
+  onFulfilled(response, options) {
+    const { message } = options
+    if (response.code === 403) {
+      message.error('请求被拒绝')
+    }
+    return response
+  },
+  onRejected(error, options) {
+    const { message } = options
+    const { response } = error
+    if (response.status === 403) {
+      message.error('请求被拒绝')
+    }
+    return Promise.reject(error)
+  }
+}
+
+const reqCommon = {
+  /**
+   * 发送请求之前做些什么
+   * @param config axios config
+   * @param options 应用配置 包含: {router, i18n, store, message}
+   * @returns {*}
+   */
+  onFulfilled(config) {
+    // const { message } = options
+    const { url, xsrfCookieName } = config
+    if (url.indexOf('login') === -1 && xsrfCookieName && !Cookie.get(xsrfCookieName)) {
+      // message.warning('认证 token 已过期，请重新登录')
+    }
+    if (Cookie.get(xsrfCookieName)) {
+      config.headers['Authorization'] = Cookie.get(xsrfCookieName) // 让每个请求携带token--['X-Token']为自定义key 请根据实际情况自行修改
+    }
+    return config
+  },
+  /**
+   * 请求出错时做点什么
+   * @param error 错误对象
+   * @param options 应用配置 包含: {router, i18n, store, message}
+   * @returns {Promise<never>}
+   */
+  onRejected(error, options) {
+    const { message } = options
+    message.error(error.message)
+    return Promise.reject(error)
+  }
+}
+
+export default {
+  request: [reqCommon], // 请求拦截
+  response: [resp401, resp403, respErr,resp200] // 响应拦截
+}

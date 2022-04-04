@@ -23,24 +23,26 @@
                 </a>
               </div>
               <div class="tz-menu-iphone">
-                <i
-                  class="el-icon-s-fold"
-                  style="color: aliceblue; font-size: 26px"
+                <el-icon
                   @click="drawer = true"
-                ></i>
+                  style="color: aliceblue; font-size: 26px"
+                >
+                  <menu-icon />
+                </el-icon>
                 <!-- 右侧边栏 -->
                 <el-drawer
                   title="菜单"
                   v-model="drawer"
                   :direction="direction"
                   :size="150"
-                  :with-header="false"
+                  :with-header="true"
                   destroy-on-close
                 >
                   <el-menu
                     :default-active="activeIndex"
                     class="el-menu-vertical-demo"
                     @select="handleSelect"
+                    
                     router
                   >
                     <el-menu-item index="/">
@@ -55,18 +57,21 @@
                       <i class="el-icon-document"></i>
                       <template #title>订单投诉</template>
                     </el-menu-item>
-                    <el-menu-item index="4">
+                    <!-- <el-menu-item index="4">
                       <i class="el-icon-headset"></i>
                       <template #title>联系客服</template>
-                    </el-menu-item>
-                    <el-menu-item @click="regShow = true">
-                      <i class="el-icon-info"></i>
-                      <template #title>注册</template>
-                    </el-menu-item>
-                    <el-menu-item @click="login">
-                      <i class="el-icon-user-solid"></i>
-                      <template #title>登录</template>
-                    </el-menu-item>
+                    </el-menu-item> -->
+                    <template v-if="!user">
+                      <el-menu-item @click="drawer=false;regShow=true;" index="/#reg">
+       
+                        <i class="el-icon-info"></i>
+                        <template #title >注册</template>
+                      </el-menu-item>
+                      <el-menu-item @click="login" index="/#login">
+                        <i class="el-icon-user-solid"></i>
+                        <template #title >登录</template>
+                      </el-menu-item>
+                    </template>
                   </el-menu>
                 </el-drawer>
               </div>
@@ -79,25 +84,47 @@
                   background-color="#545c64"
                   text-color="#fff"
                   active-text-color="#ffd04b"
+                  :ellipsis="false"
                   router
                 >
                   <el-menu-item index="/">购买商品</el-menu-item>
                   <el-menu-item index="search">查询订单</el-menu-item>
                   <el-menu-item index="complain">订单投诉</el-menu-item>
-                  <el-menu-item index="4">联系客服</el-menu-item>
-                  <el-button class="tz-button-reg" @click="regShow = true"
-                    >注册</el-button
-                  >
-                  <el-button
-                    @click="login"
-                    style="
-                      margin: 8px;
-                      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12),
-                        0 0 6px rgba(0, 0, 0, 0.04);
-                    "
-                    round
-                    >登录</el-button
-                  >
+
+                  <!-- <el-menu-item index="4">联系客服</el-menu-item> -->
+
+                  <template v-if="!user">
+                    <el-button class="tz-button-reg" @click="regShow = true"
+                      >注册</el-button
+                    >
+                    <el-button
+                      @click="login"
+                      style="
+                        margin: 12px;
+                        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12),
+                          0 0 6px rgba(0, 0, 0, 0.04);
+                      "
+                      round
+                      >登录</el-button
+                    >
+                  </template>
+                  <!-- <el-button class="tz-button-reg" v-else>{{
+                    user.user
+                  }}</el-button> -->
+                  <el-dropdown v-else>
+                    <el-button type="primary" class="tz-button-reg">
+                      {{user.user}}<el-icon class="el-icon--right"
+                        ><arrow-down
+                      /></el-icon>
+                    </el-button>
+                    <template #dropdown>
+                      <el-dropdown-menu>
+                        <el-dropdown-item>个人中心</el-dropdown-item>
+                        <el-dropdown-item>退出登录</el-dropdown-item>
+          
+                      </el-dropdown-menu>
+                    </template>
+                  </el-dropdown>
                 </el-menu>
               </div>
             </div>
@@ -122,7 +149,6 @@
         "
         @send="send"
         v-show="setPasswdShow"
-
       ></set-passwd>
       <el-main>
         <transition name="fade" mode="out-in">
@@ -134,12 +160,13 @@
 </template>
 
 <script>
+import { Menu as MenuIcon,ArrowDown } from "@element-plus/icons-vue";
 import Login from "./components/module/page/Login.vue";
 import Reg from "./components/module/page/Reg.vue";
 import SetPasswd from "./components/module/page/SetPasswd.vue";
 export default {
   name: "App",
-  components: { Login, Reg, SetPasswd },
+  components: { Login, Reg, SetPasswd, MenuIcon,ArrowDown },
   data() {
     return {
       activeIndex: "",
@@ -148,6 +175,7 @@ export default {
       setPasswdShow: false,
       drawer: false,
       direction: "rtl",
+      user: [],
     };
   },
   watch: {
@@ -157,14 +185,19 @@ export default {
         that.init();
       },
     },
+    "$store.state.account.user": function (val) {
+      
+      this.user = val;
+    },
   },
+
   mounted() {
+    this.user = JSON.parse(localStorage.getItem(process.env.VUE_APP_USER_KEY));
     this.init();
   },
   methods: {
     login() {
-      // this.$router.push({name:"Login"});
-      // console.log("123");
+      this.drawer = false
       this.loginShow = true;
     },
     handleSelect(key) {
@@ -178,16 +211,16 @@ export default {
         this.activeIndex = "/";
       }
     },
-    send(){
-      console.log("test")
+    send() {
+      console.log("test");
       return "test";
-    }
+    },
   },
 };
 </script>
 <style scoped>
 .tz-button-reg {
-  margin: 8px;
+  margin: 12px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
   background-color: rgb(84, 92, 100);
   color: rgb(255, 255, 255);
@@ -227,6 +260,9 @@ a {
   float: right;
   margin: 15px 0;
   display: none;
+}
+.tz-menu-iphone .el-drawer__body{
+  padding:0 0 0 0 !important;
 }
 .tz-logo {
   display: inline-block;

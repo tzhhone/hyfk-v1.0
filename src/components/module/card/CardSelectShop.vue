@@ -3,14 +3,14 @@
     <el-row>
       <div
         style="margin: 5px 10px 5px 0px;"
-        v-for="item in data"
+        v-for="(item,num) in data"
         :key="item.id"
       >
         <div class="tz-card-select">
           <el-card
             class="box-card"
             :class="{ 'box-card-select-g': cardKeyOn == item.id }"
-            @click="handleSelect(item.id)"
+            @click="handleSelect(item.id,num)"
           >
             <div class="card-title">
               <p>{{ item.name }}</p>
@@ -25,7 +25,7 @@
                     <p></p>
                     
                   </div>
-                  <span style="margin-left: 100px;font-size: 12px;">剩余 {{ item.num }} 件</span>
+                  <span style="margin-left: 100px;font-size: 12px;">数量 {{ item.num }} 件</span>
                 
               </div>
             </div>
@@ -58,9 +58,10 @@ export default {
     this.cardKeyOn = this.$props.cardKey;
   },
   methods: {
-    handleSelect(key) {
+    handleSelect(key,num) {
+     
       this.cardKeyOn = key;
-      this.$emit("card-click", key);
+      this.$emit("card-click",key,num);
     },
   },
 };

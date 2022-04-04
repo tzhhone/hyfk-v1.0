@@ -75,6 +75,7 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
+          console.log(valid);
           //登录
         } else {
           //错误

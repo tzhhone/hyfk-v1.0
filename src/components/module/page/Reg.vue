@@ -17,9 +17,9 @@
         ref="ruleForm"
         class="demo-ruleForm"
       >
-        <el-form-item placeholder="请输入手机号" prop="user">
+        <el-form-item placeholder="请输入账号" prop="user">
           <el-input
-            placeholder="请输入手机号"
+            placeholder="请输入账号"
             type="user"
             v-model="ruleForm.user"
             autocomplete="off"
@@ -41,7 +41,7 @@
             autocomplete="off"
           ></el-input>
         </el-form-item>
-        <el-form-item prop="code">
+        <!-- <el-form-item prop="code">
           <el-input
             type="text"
             v-model="ruleForm.code"
@@ -54,7 +54,7 @@
               </div>
             </template>
           </el-input>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item>
           <el-button
             type="primary"
@@ -89,11 +89,11 @@ export default {
         user: "",
         password: "",
         retpassword: "",
-        code: "",
+        // code: "",
       },
       rules: {
         user: [
-          { required: true, message: "请输入手机号", trigger: "blur" },
+          { required: true, message: "请输入账号", trigger: "blur" },
           { min: 5, message: "长度不能小于 5 个字符", trigger: "blur" },
         ],
         password: [
@@ -103,10 +103,10 @@ export default {
         retpassword: [
           { required: true, validator: validatePass, trigger: "blur" },
         ],
-        code: [
-          { required: true, message: "请输入验证码", trigger: "blur" },
-          { min: 5, message: "长度不能小于 5 个字符", trigger: "blur" },
-        ],
+        // code: [
+        //   { required: true, message: "请输入验证码", trigger: "blur" },
+        //   { min: 5, message: "长度不能小于 5 个字符", trigger: "blur" },
+        // ],
       },
     };
   },
@@ -157,7 +157,7 @@ export default {
   width: 100%;
   height: 100vh;
   background: rgba(0, 0, 0, 0.5);
-  z-index: 9998;
+  z-index: 100;
 }
 .tz-close {
   position: absolute;

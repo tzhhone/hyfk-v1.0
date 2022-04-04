@@ -36,23 +36,15 @@
           </el-table-column>
           <el-table-column label="商品 ID" prop="id"> </el-table-column>
           <el-table-column label="商品名称" prop="name"> </el-table-column>
-          <el-table-column label="操作" prop="scope">
+          <el-table-column label="操作">
             <template #default="scope">
-              <el-button
-                size="mini"
-                v-clipboard:copy="scope.row.key"
-                v-clipboard:success="onSuccess"
-                v-clipboard:error="onError"
+              <el-button size="mini" @click="toClipboard(scope.row.key)"
                 >复制</el-button
               >
 
-              <a
-                :href="'http://wpa.qq.com/msgrd?v=3&uin='+scope.row.qq+'&site=qq&menu=yes'"
-                target="_blank"
-                style="color: azure;margin-left: 10px;"
+              <el-button size="mini" type="danger"
+                >售后:{{ scope.row.qq }}</el-button
               >
-                <el-button size="mini" type="danger">售后</el-button>
-              </a>
             </template>
           </el-table-column>
         </el-table>
@@ -73,7 +65,7 @@
               ></el-input>
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" @click="onSubmit">查询</el-button>
+              <el-button type="primary">查询</el-button>
             </el-form-item>
           </el-form>
         </div>
@@ -84,7 +76,8 @@
     </el-tabs>
   </div>
 </template>
-<style>
+
+<style lang="less" scoped>
 .demo-table-expand {
   font-size: 0;
 }
@@ -97,8 +90,14 @@
   margin-bottom: 0;
   width: 50%;
 }
+.form-search {
+  margin-right: auto;
+  margin-left: auto;
+  max-width: 280px;
+}
 </style>
 <script>
+import { toClipboard } from "@soerenmartius/vue3-clipboard";
 export default {
   name: "search",
   data() {
@@ -121,31 +120,21 @@ export default {
       ],
     };
   },
-  mounted() {
-
-  },
   methods: {
-    onSuccess() {
-      this.$notify({
-        title: "成功",
-        message: "复制成功，根据商品描述粘贴使用吧",
-        type: "success",
-      });
-    },
-    onError() {
+    toClipboard(key) {
+      if (toClipboard(key)) {
+        this.$notify({
+          title: "成功",
+          message: "复制成功，根据商品描述粘贴使用吧",
+          type: "success",
+        });
+      }else{
       this.$notify.error({
         title: "错误",
         message: "复制失败，请手动复制key",
       });
+      }
     },
   },
 };
 </script>
-
-<style>
-.form-search {
-  margin-right: auto;
-  margin-left: auto;
-  max-width: 280px;
-}
-</style>

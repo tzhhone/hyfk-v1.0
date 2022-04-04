@@ -107,7 +107,8 @@ export default {
     onHelp(id) {
       this.cardData.some((element) => {
         if (element.id == id) {
-          store.commit("addHelpData", element);
+          
+          store.commit("help/addHelpData", element);
           this.$router.push("/help");
 
           return true;
