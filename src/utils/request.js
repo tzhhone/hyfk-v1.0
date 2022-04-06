@@ -57,6 +57,7 @@ function setAuthorization(auth, authType = AUTH_TYPE.BEARER) {
   switch (authType) {
     case AUTH_TYPE.BEARER:
       Cookie.set(xsrfHeaderName, 'Bearer ' + auth.token, {expires: auth.expireAt})
+      localStorage.setItem("token",auth.token)
       break
     case AUTH_TYPE.BASIC:
     case AUTH_TYPE.AUTH1:
@@ -76,6 +77,7 @@ function removeAuthorization(authType = AUTH_TYPE.BEARER) {
       console.log("clear")
       Cookie.remove(xsrfHeaderName);
       store.commit("account/setUser");
+      localStorage.removeItem("token");
       localStorage.removeItem("user");
       break
     case AUTH_TYPE.BASIC:
@@ -92,9 +94,13 @@ function removeAuthorization(authType = AUTH_TYPE.BEARER) {
  * @returns {boolean}
  */
 function checkAuthorization(authType = AUTH_TYPE.BEARER) {
+  let token =  localStorage.getItem("token");
   switch (authType) {
     case AUTH_TYPE.BEARER:
-      if (Cookie.get(xsrfHeaderName)) {
+      if (token) {
+        if(!Cookie.get(xsrfHeaderName)){
+          Cookie.set(xsrfHeaderName, 'Bearer ' + token)
+        }
         return true
       }
       break

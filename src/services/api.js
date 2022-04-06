@@ -19,7 +19,9 @@ module.exports = {
   GETCLASSESSHOPLABEL: `${BASE_URL}/classes/shop/get/label`,//获取分类标签
   //商品管理 shop
   GETSHOPLABEL: `${BASE_URL}/shop/get/label`,//获取分类标签
-  
+  //支付
+  POSTPAY: `${BASE_URL}/create/pay`,//获取分类标签
+  GETLIST: `${BASE_URL}/pay/getlist`,//获取分类标签
   //库存管理 shop
   CDKLIST: `${BASE_URL}/cdk/list`, //查询
   DELCDK: `${BASE_URL}/cdk/del`, //删除

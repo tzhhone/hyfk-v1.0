@@ -64,7 +64,12 @@
             </div>
           </template>
           <template #default>
-            <el-alert title="商品公告" type="success" :closable="false" v-if="shopData.place">
+            <el-alert
+              title="商品公告"
+              type="success"
+              :closable="false"
+              v-if="shopData.place"
+            >
               <p>{{ shopData.place }}</p>
             </el-alert>
 
@@ -73,19 +78,21 @@
               style="margin-top: 10px"
               :model="form"
               label-width="80px"
-              
             >
               <el-form-item label="商品名称">
-                <el-select v-model="ShopKey" class="m-2" placeholder="Select" @change="selectChange">
+                <el-select
+                  v-model="ShopKey"
+                  class="m-2"
+                  placeholder="Select"
+                  @change="selectChange"
+                >
                   <el-option
-                  
                     v-for="item in shopDataArr"
                     :key="item.value"
                     :label="item.label"
                     :value="item.value"
                   />
                 </el-select>
-             
               </el-form-item>
               <el-form-item label="商品价格">
                 <el-input
@@ -143,9 +150,29 @@
       style="margin-top: 10px"
       v-model="inputText"
       v-show="buttonShow"
+      @click="onPay"
       id="boom"
     ></el-input>
   </div>
+  <el-dialog v-model="centerDialogVisible" title="支付" :width="isMobile ? '100%':'35%'" center>
+    <div style="text-align: center;">
+      <span>请使用微信扫一扫,支付</span><span style="font-weight:700;font-size:18px;color:red;"> {{ pay.coin }} </span><span>元</span>
+      <div style="display: flex;justify-content: center;">
+        <el-image style="width: 150px; height: 150px;" :src="pay.url_qrcode" fit="支付二维码" />
+      </div>
+      
+      
+    </div>
+
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="centerDialogVisible = false">取消</el-button>
+        <el-button type="primary" @click="centerDialogVisible = false"
+          >我已支付</el-button
+        >
+      </span>
+    </template>
+  </el-dialog>
 </template>
 
 <script>
@@ -155,7 +182,8 @@ import CardPay from "../components/module/card/CardPay.vue";
 import { getClassesLabel } from "@/services/shop/classes";
 import { getClassesShopLabel } from "@/services/shop/classesShop";
 import { getShopLabel } from "@/services/shop/shop";
-
+import { pay } from "@/services/pay/pay";
+import _ from 'lodash'
 export default {
   components: { CardSelect, CardSelectShop, CardPay },
   name: "home",
@@ -171,20 +199,26 @@ export default {
         resource: "",
         desc: "",
       },
+      isMobile:this.$store.state.setting.isMobile,
+      pay:{
+        url_qrcode:"https://api.xunhupay.com/payments/wechat/qrcode?id=20217000465&nonce_str=7017664999&time=1649067997&appid=201906145235&hash=684677d54d2ea4380c48ae450078341c",
+      },
       user: [],
+      centerDialogVisible: false,
       inputText: "提交订单",
+      
       num: 1,
       cardKey: 1,
       cardShopKey: 0,
       cardPayKey: 0,
       shopData: {},
-      shopDataArr:[],
+      shopDataArr: [],
       ShopKey: 0,
       data: [],
       data1: [],
       data2: [
-        { id: 1, name: "支付宝", img: "icon-zhifubao" },
-        { id: 2, name: "微信支付", img: "icon-weixinzhifu1" },
+        // { id: 1, name: "支付宝", img: "icon-zhifubao" },
+        { id: 1, name: "微信支付", img: "icon-weixinzhifu1" },
         // { id: 3, name: "银联支付", img: "icon-zhifupingtai-yinlian" },
         // { id: 4, name: "PayPal", img: "icon-paypal" },
         // { id: 5, name: "数字货币支付", img: "icon-shejiaotubiao-33" },
@@ -198,6 +232,7 @@ export default {
   mounted() {
     this.classes();
     this.handleSelect(this.cardKey);
+    
   },
   methods: {
     classes() {
@@ -252,7 +287,7 @@ export default {
           //成功
 
           this.shopDataArr = data.data;
-    
+
           if (data.data.length > 0) {
             this.ShopKey = data.data[0].value;
             this.shopData = data.data[0];
@@ -280,18 +315,38 @@ export default {
       this.cardPayKey = key;
     },
     //选择器选择
-    selectChange(val){
-      this.shopDataArr.forEach(element => {
-        if(element.value == val){
+    selectChange(val) {
+      this.shopDataArr.forEach((element) => {
+        if (element.value == val) {
           this.shopData = element;
           this.shopData.min = element.price;
         }
       });
-     
     },
     handleChange(value) {
       //更新商品价格
-      this.shopData.min = this.shopData.price * value;
+
+      
+      this.shopData.count = value;
+      this.shopData.min = _.ceil(_.multiply(this.shopData.price,value),2);
+    },
+    onPay() {
+      console.log(
+        this.shopData.value,
+        this.shopData.count ? this.shopData.count : 1
+      );
+      pay(this.shopData.value, this.shopData.count ? this.shopData.count : 1).then(
+        (res) => {
+          const data = res.data;
+          if(data.status == 200){
+            this.centerDialogVisible = true;
+            this.pay = data.data;
+          }
+          
+          
+        }
+      );
+      console.log(this.shopData);
     },
   },
 };

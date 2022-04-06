@@ -25,6 +25,14 @@
             autocomplete="off"
           ></el-input>
         </el-form-item>
+        <el-form-item placeholder="请输入邮箱" prop="email">
+          <el-input
+            placeholder="请输入邮箱"
+            type="email"
+            v-model="ruleForm.email"
+            autocomplete="off"
+          ></el-input>
+        </el-form-item>
         <el-form-item placeholder="请输入密码" prop="password">
           <el-input
             placeholder="请输入密码"
@@ -81,12 +89,26 @@ export default {
         callback();
       }
     };
+    var validateEmail = (rule, value, callback) => {
+      const mailReg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/;
+      if (!value) {
+        return callback(new Error("邮箱不能为空"));
+      }
+      setTimeout(() => {
+        if (mailReg.test(value)) {
+          callback();
+        } else {
+          callback(new Error("请输入正确的邮箱格式"));
+        }
+      }, 100);
+    };
     return {
       labelPosition: "left",
-      codeText:"发送",
-      codeDisabled:false,
+      codeText: "发送",
+      codeDisabled: false,
       ruleForm: {
         user: "",
+        email:"",
         password: "",
         retpassword: "",
         // code: "",
@@ -96,6 +118,10 @@ export default {
           { required: true, message: "请输入账号", trigger: "blur" },
           { min: 5, message: "长度不能小于 5 个字符", trigger: "blur" },
         ],
+        email: [
+          { required: true, validator: validateEmail, trigger: "blur" },
+        ],
+        
         password: [
           { required: true, message: "请输入密码", trigger: "blur" },
           { min: 8, message: "长度不能小于 8 个字符", trigger: "blur" },
@@ -127,14 +153,14 @@ export default {
     send() {
       this.codeDisabled = true;
       this.codeText = 60;
-      var x = setInterval(()=>{
+      var x = setInterval(() => {
         this.codeText--;
-        if(this.codeText <= 0){
+        if (this.codeText <= 0) {
           this.codeText = "发送";
           this.codeDisabled = false;
           clearInterval(x);
         }
-      },1000)
+      }, 1000);
       this.$emit("send", true);
     },
   },

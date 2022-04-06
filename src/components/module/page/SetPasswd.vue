@@ -31,9 +31,9 @@
       >
         <el-form-item prop="user">
           <el-input
-            type="user"
+            type="email"
             v-model="ruleForm.user"
-            placeholder="账号"
+            placeholder="邮箱"
             autocomplete="off"
           ></el-input>
         </el-form-item>
