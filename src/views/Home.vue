@@ -1,8 +1,8 @@
 <template>
   <div class="home" ref="home">
-    <el-alert title="公告" type="success" :closable="false">
+    <!-- <el-alert title="公告" type="success" :closable="false">
       <p>这里是辉耀发卡官方demo站。所有商品仅供测试。并无实际商品。1234</p>
-    </el-alert>
+    </el-alert> -->
 
     <el-card class="box-card" style="margin-top: 15px">
       <div class="tz-title">
@@ -17,9 +17,8 @@
       <el-divider></el-divider>
 
       <div class="tz-title">
-        <i class="el-icon-menu">
-          <p>选择商品</p>
-        </i>
+        <i class="el-icon-menu"> </i>
+        <p>选择商品</p>
       </div>
       <card-select-shop
         v-on:card-click="handleSelectShop"
@@ -29,9 +28,8 @@
       <el-divider v-show="showShop" id="shop"></el-divider>
 
       <div class="tz-title" v-show="showShop">
-        <i class="el-icon-menu">
-          <p>商品详情</p>
-        </i>
+        <i class="el-icon-menu"> </i>
+        <p>商品详情</p>
       </div>
       <div v-show="showShop">
         <el-skeleton :throttle="300" :loading="loading" animated>
@@ -154,22 +152,30 @@
       id="boom"
     ></el-input>
   </div>
-  <el-dialog v-model="centerDialogVisible" title="支付" :width="isMobile ? '100%':'35%'" center>
-    <div style="text-align: center;">
-      <span>请使用微信扫一扫,支付</span><span style="font-weight:700;font-size:18px;color:red;"> {{ pay.coin }} </span><span>元</span>
-      <div style="display: flex;justify-content: center;">
-        <el-image style="width: 150px; height: 150px;" :src="pay.url_qrcode" fit="支付二维码" />
+  <el-dialog
+    v-model="centerDialogVisible"
+    title="支付"
+    :width="isMobile ? '100%' : '35%'"
+    center
+  >
+    <div style="text-align: center">
+      <span>请使用微信扫一扫,支付</span
+      ><span style="font-weight: 700; font-size: 18px; color: red">
+        {{ pay.coin }} </span
+      ><span>元</span>
+      <div style="display: flex; justify-content: center">
+        <el-image
+          style="width: 150px; height: 150px"
+          :src="pay.url_qrcode"
+          fit="支付二维码"
+        />
       </div>
-      
-      
     </div>
 
     <template #footer>
       <span class="dialog-footer">
-        <el-button @click="centerDialogVisible = false">取消</el-button>
-        <el-button type="primary" @click="centerDialogVisible = false"
-          >我已支付</el-button
-        >
+        <el-button @click="dialogQx">取消</el-button>
+        <el-button type="primary" @click="isPayClick">我已支付</el-button>
       </span>
     </template>
   </el-dialog>
@@ -182,8 +188,8 @@ import CardPay from "../components/module/card/CardPay.vue";
 import { getClassesLabel } from "@/services/shop/classes";
 import { getClassesShopLabel } from "@/services/shop/classesShop";
 import { getShopLabel } from "@/services/shop/shop";
-import { pay } from "@/services/pay/pay";
-import _ from 'lodash'
+import { pay, isPay } from "@/services/pay/pay";
+import _ from "lodash";
 export default {
   components: { CardSelect, CardSelectShop, CardPay },
   name: "home",
@@ -199,14 +205,16 @@ export default {
         resource: "",
         desc: "",
       },
-      isMobile:this.$store.state.setting.isMobile,
-      pay:{
-        url_qrcode:"https://api.xunhupay.com/payments/wechat/qrcode?id=20217000465&nonce_str=7017664999&time=1649067997&appid=201906145235&hash=684677d54d2ea4380c48ae450078341c",
+      isPayTimer: "",
+      isMobile: this.$store.state.setting.isMobile,
+      pay: {
+        url_qrcode:
+          "https://api.xunhupay.com/payments/wechat/qrcode?id=20217000465&nonce_str=7017664999&time=1649067997&appid=201906145235&hash=684677d54d2ea4380c48ae450078341c",
       },
       user: [],
       centerDialogVisible: false,
       inputText: "提交订单",
-      
+
       num: 1,
       cardKey: 1,
       cardShopKey: 0,
@@ -232,8 +240,8 @@ export default {
   mounted() {
     this.classes();
     this.handleSelect(this.cardKey);
-    
   },
+
   methods: {
     classes() {
       getClassesLabel().then((res) => {
@@ -326,28 +334,57 @@ export default {
     handleChange(value) {
       //更新商品价格
 
-      
       this.shopData.count = value;
-      this.shopData.min = _.ceil(_.multiply(this.shopData.price,value),2);
+      this.shopData.min = _.ceil(_.multiply(this.shopData.price, value), 2);
     },
     onPay() {
       console.log(
         this.shopData.value,
         this.shopData.count ? this.shopData.count : 1
       );
-      pay(this.shopData.value, this.shopData.count ? this.shopData.count : 1).then(
-        (res) => {
-          const data = res.data;
-          if(data.status == 200){
-            this.centerDialogVisible = true;
-            this.pay = data.data;
-          }
-          
-          
+      pay(
+        this.shopData.value,
+        this.shopData.count ? this.shopData.count : 1
+      ).then((res) => {
+        const data = res.data;
+        if (data.status == 200) {
+          this.centerDialogVisible = true;
+          this.pay = data.data;
+          this.isPayTimer = setInterval(() => {
+            isPay(this.pay.order_id).then((res) => {
+              const data = res.data;
+              if (data.status == 200) {
+                this.$message.success("支付成功");
+                this.$router.push("search");
+                clearInterval(this.isPayTimer);
+              }
+            });
+          }, 3000);
         }
-      );
+      });
       console.log(this.shopData);
     },
+    isPayClick() {
+      isPay(this.pay.order_id).then((res) => {
+        const data = res.data;
+        if (data.status == 200) {
+          this.$message.success("支付成功");
+          this.centerDialogVisible = false;
+          this.$router.push("search");
+          clearInterval(this.isPayTimer);
+        }else{
+          this.$message.info("未支付");
+        }
+      });
+    },
+    dialogQx(){
+      this.centerDialogVisible = false;
+      clearInterval(this.isPayTimer);
+      
+    }
+  },
+  beforeUnmount() {
+    clearInterval(this.isPayTimer);
   },
 };
 </script>

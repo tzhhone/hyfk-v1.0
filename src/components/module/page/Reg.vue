@@ -44,7 +44,7 @@
         <el-form-item prop="retpassword">
           <el-input
             placeholder="请确认密码"
-            type="retpassword"
+            type="password"
             v-model="ruleForm.retpassword"
             autocomplete="off"
           ></el-input>
@@ -77,6 +77,8 @@
 </template>
 
 <script>
+import { reg } from "@/services/user";
+import {setAuthorization} from '@/utils/request'
 export default {
   name: "Reg",
   data() {
@@ -108,7 +110,7 @@ export default {
       codeDisabled: false,
       ruleForm: {
         user: "",
-        email:"",
+        email: "",
         password: "",
         retpassword: "",
         // code: "",
@@ -118,10 +120,8 @@ export default {
           { required: true, message: "请输入账号", trigger: "blur" },
           { min: 5, message: "长度不能小于 5 个字符", trigger: "blur" },
         ],
-        email: [
-          { required: true, validator: validateEmail, trigger: "blur" },
-        ],
-        
+        email: [{ required: true, validator: validateEmail, trigger: "blur" }],
+
         password: [
           { required: true, message: "请输入密码", trigger: "blur" },
           { min: 8, message: "长度不能小于 8 个字符", trigger: "blur" },
@@ -141,6 +141,22 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           //登录
+          reg(
+            this.ruleForm.user,
+            this.ruleForm.email,
+            this.ruleForm.password
+          ).then((res) => {
+            const data = res.data;
+            if (data.status == 200) {
+              this.$store.commit("account/setUser", data.data);
+              setAuthorization({
+                token: data.token,
+                expireAt: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
+              });
+              
+              this.$emit("close", true);
+            }
+          });
         } else {
           //错误
           return false;

@@ -12,7 +12,9 @@
     <div class="form-main tz-login-wrap">
       <div class="tz-header">
         <div class="back" @click="back">
-          <el-icon style=" position: absolute; left:-15px;top:4.5px"><arrow-left-bold /></el-icon>
+          <el-icon style="position: absolute; left: -15px; top: 4.5px"
+            ><arrow-left-bold
+          /></el-icon>
           <span>修改密码</span>
         </div>
 
@@ -29,10 +31,10 @@
         ref="ruleForm"
         class="demo-ruleForm"
       >
-        <el-form-item prop="user">
+        <el-form-item prop="email">
           <el-input
-            type="email"
-            v-model="ruleForm.user"
+            type="text"
+            v-model="ruleForm.email"
             placeholder="邮箱"
             autocomplete="off"
           ></el-input>
@@ -46,7 +48,9 @@
           >
             <template #append>
               <div>
-                <el-button @click="send" :disabled="codeDisabled">{{ codeText }}</el-button>
+                <el-button @click="send" :disabled="codeDisabled">{{
+                  codeText
+                }}</el-button>
               </div>
             </template>
           </el-input>
@@ -83,20 +87,22 @@
 </template>
 
 <script>
-import {ArrowLeftBold} from "@element-plus/icons-vue"
+import { ArrowLeftBold } from "@element-plus/icons-vue";
+import { setPasswdsendCode, setPasswd } from "@/services/user";
 export default {
   name: "SetPasswd",
-  components:{ ArrowLeftBold },
+  components: { ArrowLeftBold },
   data() {
     return {
       labelPosition: "left",
       codeText: "发送",
       codeDisabled: false,
       ruleForm: {
-        user: "",
+        email: "",
         password: "",
         setPassword: "",
         code: "",
+        codeToken: "",
       },
       rules: {
         user: [
@@ -113,7 +119,7 @@ export default {
         ],
         code: [
           { required: true, message: "请输入验证码", trigger: "blur" },
-          { min: 5, message: "长度不能小于 5 个字符", trigger: "blur" },
+          { min: 4, message: "长度不能小于 4 个字符", trigger: "blur" },
         ],
       },
     };
@@ -123,6 +129,25 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           //登录
+
+          setPasswd(
+            this.ruleForm.email,
+            this.ruleForm.password,
+            this.ruleForm.code,
+            this.codeToken
+          ).then((res) => {
+            const data = res.data;
+            if (data.status == 200) {
+              this.ruleForm = {
+                email: "",
+                password: "",
+                setPassword: "",
+                code: "",
+                codeToken: "",
+              };
+              this.$emit("close", true);
+            }
+          });
         } else {
           //错误
           return false;
@@ -136,19 +161,23 @@ export default {
       this.$emit("back", true);
     },
     send() {
-      
       this.codeDisabled = true;
       this.codeText = 60;
-      var x = setInterval(()=>{
+      setPasswdsendCode(this.ruleForm.email).then((res) => {
+        const data = res.data;
+        if (data.status == 200) {
+          this.codeToken = data.codeToken;
+        }
+      });
+      var x = setInterval(() => {
         this.codeText--;
-        if(this.codeText <= 0){
+        if (this.codeText <= 0) {
           this.codeText = "发送";
           this.codeDisabled = false;
           clearInterval(x);
         }
-      },1000)
-      var ret = this.$emit("send", true);
-      console.log(ret);
+      }, 1000);
+      this.$emit("send", true);
     },
   },
 

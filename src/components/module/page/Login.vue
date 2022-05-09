@@ -95,8 +95,6 @@ export default {
         
           login(this.ruleForm.user,this.ruleForm.password).then((res)=>{
             const data = res.data;
-            
-            console.log(data);
             if(data.status == 200){
               this.$store.commit("account/setUser", data.data)
               setAuthorization({token: data.token, expireAt: new Date(Date.now() + 3*24*60*60*1000)})

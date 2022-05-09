@@ -6,7 +6,14 @@ module.exports = {
 
   LOGIN: `${BASE_URL}/user/login`,//登录
   INFO: `${BASE_URL}/user/info`,//获取用户信息
-  
+  REG: `${BASE_URL}/user/reg`,//注册
+  VERIFYEMAIL: `${BASE_URL}/user/verify/email`,//验证邮箱
+  SENDVERIFYEMAIL: `${BASE_URL}/user/send/verify/email`,//重新发送验证邮件
+
+  //修改密码
+  SETPASSWDSENDCODE: `${BASE_URL}/user/set/passwd/send/code`,//重置密码邮件
+  SETPASSWD:`${BASE_URL}/user/set/passwd`,//设置新密码
+
   //前台用户
   USERLIST: `${BASE_URL}/user/list`, //查询前台用户列表
   DELUSER: `${BASE_URL}/user/del`, //删除前台用户
@@ -19,9 +26,12 @@ module.exports = {
   GETCLASSESSHOPLABEL: `${BASE_URL}/classes/shop/get/label`,//获取分类标签
   //商品管理 shop
   GETSHOPLABEL: `${BASE_URL}/shop/get/label`,//获取分类标签
+
   //支付
-  POSTPAY: `${BASE_URL}/create/pay`,//获取分类标签
-  GETLIST: `${BASE_URL}/pay/getlist`,//获取分类标签
+  POSTPAY: `${BASE_URL}/create/pay`,//创建支付订单
+  GETLIST: `${BASE_URL}/pay/getlist`,//查询支付订单
+  POSTISPAY:`${BASE_URL}/pay/is`,//判断是否支付
+
   //库存管理 shop
   CDKLIST: `${BASE_URL}/cdk/list`, //查询
   DELCDK: `${BASE_URL}/cdk/del`, //删除

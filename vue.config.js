@@ -7,6 +7,8 @@ module.exports = {
   },
   configureWebpack: {
     module: {
+      devtool: process.env.NODE_ENV === 'development' ? 'cheap-module-eval-source-map' : 'cheap-module-source-map',
+      
       rules: [
         {
           test: /\.mjs$/,

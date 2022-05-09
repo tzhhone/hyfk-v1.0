@@ -12,20 +12,25 @@ const respErr = {
    * @returns {*}
    */
    onFulfilled(response, options) {
+
     const { message } = options
     
     switch (response.data.status) {
       case 400:
-        message.error(response.data.msg)
+
+        //message.error(response.data.msg)
         break;
       case 410000:
         removeAuthorization()
         message.error(response.data.msg)
         break;
+      case 410001:
+        removeAuthorization()
+        //message.error(response.data.msg)
+        break;
       case 410002:
         removeAuthorization()
-        
-        message.error(response.data.msg)
+        //message.error(response.data.msg)
         break;
       default:
         break;
